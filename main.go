@@ -9,6 +9,7 @@ import (
 	"gopkg.in/olivere/elastic.v3"
 	"github.com/pborman/uuid"
 	"reflect"
+        "strings"
 )
 
 func main() {
