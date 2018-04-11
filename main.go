@@ -9,7 +9,7 @@ import (
 	"gopkg.in/olivere/elastic.v3"
 	"github.com/pborman/uuid"
 	"reflect"
-        "strings"
+	 "strings"
 )
 
 func main() {
@@ -109,23 +109,9 @@ const (
 	//PROJECT_ID = "around-xxx"
 	//BT_INSTANCE = "around-post"
 	// Needs to update this URL if you deploy it to cloud.
-	ES_URL = "http://35.231.239.235:9200"
+	ES_URL = "http://35.196.230.243:9200"
 
 )
-
-func containsFilteredWords(s *string) bool {
-        filteredWords := []string{
-                "fuck",
-                "100",
-        }
-        for _, word := range filteredWords {
-                if strings.Contains(*s, word) {
-                        return true
-                }
-        }
-        return false
-}
-
 
 func handlerSearch(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received one request for search")
@@ -178,8 +164,9 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 		p := item.(Post) // p = (Post) item
 		fmt.Printf("Post by %s: %s at lat %v and lon %v\n", p.User, p.Message, p.Location.Lat, p.Location.Lon)
 		// TODO(student homework): Perform filtering based on keywords such as web spam etc.
-		 if !containsFilteredWords(&p.Message) {
+		if containsFilteredWords(&p.Message) {
                         ps = append(ps, p)
+		//	fmt.Printf("123123123 by %s: %s at lat %v and lon %v\n", p.User, p.Message, p.Location.Lat, p.Location.Lon)
                 }
 	}
 	js, err := json.Marshal(ps)
@@ -187,10 +174,20 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Write(js)
 }
-
+	func containsFilteredWords(s *string) bool {
+			filteredWords := []string{
+			"fuck",
+			"100",
+		}
+		for _, word := range filteredWords {
+			if strings.Contains(*s, word) {
+			return true
+			}
+		}
+		return false
+	}
 
